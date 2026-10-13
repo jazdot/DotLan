@@ -1,0 +1,87 @@
+<svg viewBox="0 0 400 400" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="dlGoldHairline" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#D97706" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.2" />
+    </linearGradient>
+    <linearGradient id="dlGold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#FBBF24" />
+      <stop offset="100%" stop-color="#D97706" />
+    </linearGradient>
+    <linearGradient id="dlEmerald" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#34D399" />
+      <stop offset="100%" stop-color="#059669" />
+    </linearGradient>
+    <linearGradient id="dlTeal" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2DD4BF" />
+      <stop offset="100%" stop-color="#0F766E" />
+    </linearGradient>
+    <radialGradient id="dlGoldGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#F59E0B" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#F59E0B" stop-opacity="0.0" />
+    </radialGradient>
+    <radialGradient id="dlEmeraldGlow" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.25" />
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.0" />
+    </radialGradient>
+    <linearGradient id="dlSweep" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10B981" stop-opacity="0.4" />
+      <stop offset="100%" stop-color="#10B981" stop-opacity="0.0" />
+    </linearGradient>
+  </defs>
+
+  <!-- 1. Obsidian Squircle Chassis -->
+  <rect width="400" height="400" rx="80" fill="#05070B"/>
+  <rect x="2" y="2" width="396" height="396" rx="78" stroke="url(#dlGoldHairline)" stroke-width="2" fill="none"/>
+
+  <!-- Ambient Emerald Radar Glow -->
+  <circle cx="200" cy="200" r="160" fill="url(#dlEmeraldGlow)"/>
+
+  <!-- 2. Concentric Subnet Radar Range Rings -->
+  <circle cx="200" cy="200" r="150" stroke="#065F46" stroke-width="2" stroke-dasharray="6 6" fill="none"/>
+  <circle cx="200" cy="200" r="105" stroke="#047857" stroke-width="2.5" fill="none"/>
+  <circle cx="200" cy="200" r="60" stroke="#059669" stroke-width="3" fill="none"/>
+
+  <!-- Radar Crosshairs (Subnet Axes) -->
+  <line x1="200" y1="45" x2="200" y2="355" stroke="#115E59" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <line x1="45" y1="200" x2="355" y2="200" stroke="#115E59" stroke-width="1.5" stroke-dasharray="4 4"/>
+
+  <!-- 3. Radar Sweep Fan (45 Degree Sector) -->
+  <path d="M 200,200 L 306,94 A 150,150 0 0,0 200,50 Z" fill="url(#dlSweep)"/>
+  <line x1="200" y1="200" x2="306" y2="94" stroke="#34D399" stroke-width="2.5"/>
+
+  <!-- 4. Subnet Mesh Topology Interconnect Lines -->
+  <line x1="200" y1="200" x2="115" y2="120" stroke="#10B981" stroke-width="2.5" stroke-opacity="0.7"/>
+  <line x1="200" y1="200" x2="285" y2="135" stroke="#10B981" stroke-width="2.5" stroke-opacity="0.7"/>
+  <line x1="200" y1="200" x2="105" y2="275" stroke="#10B981" stroke-width="2.5" stroke-opacity="0.7"/>
+  <line x1="115" y1="120" x2="285" y2="135" stroke="#065F46" stroke-width="1.5" stroke-dasharray="3 3"/>
+  <line x1="105" y1="275" x2="200" y2="200" stroke="#065F46" stroke-width="1.5"/>
+
+  <!-- 5. Discovered Local IoT / Network Nodes -->
+  <!-- Node A: Camera / RTSP Port 554 Node (Top-Left) -->
+  <circle cx="115" cy="120" r="14" fill="#0B131B" stroke="#34D399" stroke-width="3"/>
+  <circle cx="115" cy="120" r="6" fill="#34D399"/>
+  <!-- Mini camera aperture indicator -->
+  <circle cx="115" cy="120" r="2.5" fill="#FFFFFF"/>
+
+  <!-- Node B: Smart Edge / IoT Device (Top-Right) -->
+  <circle cx="285" cy="135" r="12" fill="#0B131B" stroke="#2DD4BF" stroke-width="3"/>
+  <circle cx="285" cy="135" r="5" fill="#2DD4BF"/>
+
+  <!-- Node C: Local Workstation / Mobile Node (Bottom-Left) -->
+  <circle cx="105" cy="275" r="11" fill="#0B131B" stroke="#10B981" stroke-width="2.5"/>
+  <circle cx="105" cy="275" r="4" fill="#10B981"/>
+
+  <!-- Node D: Passive Printer / mDNS Node (Far-Right) -->
+  <circle cx="330" cy="225" r="9" fill="#0B131B" stroke="#059669" stroke-width="2"/>
+  <circle cx="330" cy="225" r="3" fill="#059669"/>
+
+  <!-- Technical CIDR Coordinate Labels -->
+  <text x="50" y="70" fill="#6EE7B7" font-size="10" font-family="monospace" font-weight="bold">192.168.1.0/24</text>
+  <text x="270" y="340" fill="#6B7280" font-size="9.5" font-family="monospace">mDNS • UPnP</text>
+
+  <!-- 6. Signature Jazdot Pulsing Gold Dot (Central Gateway Anchor) -->
+  <circle cx="200" cy="200" r="38" fill="url(#dlGoldGlow)"/>
+  <circle cx="200" cy="200" r="22" fill="url(#dlGold)"/>
+  <circle cx="200" cy="200" r="26" stroke="#FBBF24" stroke-width="2" stroke-opacity="0.7" fill="none"/>
+</svg>
