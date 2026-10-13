@@ -14,7 +14,7 @@ class PdfAuditReportGenerator {
    * Pure-Dart 64-bit FNV-1a cryptographic provenance hash.
    */
   static String calculateSealHash(String payload) {
-    const BigInt fnvPrime = BigInt.from(0x100000001b3);
+    final BigInt fnvPrime = BigInt.from(0x100000001b3);
     BigInt hash = BigInt.parse('0xcbf29ce484222325');
     final bytes = utf8.encode(payload);
 

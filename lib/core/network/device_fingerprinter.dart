@@ -65,6 +65,8 @@ class DeviceFingerprinter {
         lowerHost.contains('bravia') ||
         lowerHost.contains('sonos') ||
         lowerHost.contains('smarttv') ||
+        lowerMdns.contains('tv') ||
+        lowerMdns.contains('cast') ||
         lowerUpnp.contains('tv') ||
         lowerUpnp.contains('sonos') ||
         vendor.contains('sonos') ||
