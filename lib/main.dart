@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'core/theme/obsidian_theme.dart';
-import 'core/widgets/dot_lan_animated_logo.dart';
-import 'core/widgets/jazdot_suite_drawer.dart';
-import 'features/lan_cubit/lan_cubit.dart';
-import 'features/lan_cubit/lan_state.dart';
-import 'features/radar/presentation/radar_tab.dart';
-import 'features/inventory/presentation/inventory_tab.dart';
-import 'features/camera_sentry/presentation/camera_sentry_tab.dart';
-import 'features/diagnostics/presentation/diagnostics_tab.dart';
+import 'package:dotlan/core/theme/obsidian_theme.dart';
+import 'package:dotlan/core/widgets/dot_lan_animated_logo.dart';
+import 'package:dotlan/core/widgets/jazdot_suite_drawer.dart';
+import 'package:dotlan/features/lan_cubit/lan_cubit.dart';
+import 'package:dotlan/features/lan_cubit/lan_state.dart';
+import 'package:dotlan/features/radar/presentation/radar_tab.dart';
+import 'package:dotlan/features/inventory/presentation/inventory_tab.dart';
+import 'package:dotlan/features/camera_sentry/presentation/camera_sentry_tab.dart';
+import 'package:dotlan/features/diagnostics/presentation/diagnostics_tab.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();

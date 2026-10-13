@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../core/theme/obsidian_theme.dart';
-import 'dot_lan_animated_logo.dart';
+import './dot_lan_animated_logo.dart';
 
 /**
  * Jazdot Suite Navigation Drawer.

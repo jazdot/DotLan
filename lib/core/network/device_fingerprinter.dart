@@ -1,5 +1,5 @@
 import '../models/lan_device.dart';
-import 'oui_database.dart';
+import './oui_database.dart';
 
 /**
  * Multi-Signal Device Classifier & Fingerprinting Engine.

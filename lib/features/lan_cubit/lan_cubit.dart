@@ -6,7 +6,7 @@ import '../../core/network/subnet_discovery_engine.dart';
 import '../../core/network/camera_sentry_engine.dart';
 import '../../core/network/upnp_auditor.dart';
 import '../../core/audio/field_feedback_engine.dart';
-import 'lan_state.dart';
+import './lan_state.dart';
 
 /**
  * Reactive Business Logic Controller for DotLan Subnet Radar.

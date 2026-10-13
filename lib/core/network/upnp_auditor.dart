@@ -2,7 +2,7 @@ import 'dart:async';
 import 'dart:convert';
 import 'dart:io';
 import '../models/upnp_port_mapping.dart';
-import 'subnet_calculator.dart';
+import './subnet_calculator.dart';
 
 /**
  * Result of an executive router UPnP IGD vulnerability inspection.

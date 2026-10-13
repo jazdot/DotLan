@@ -4,7 +4,7 @@ import '../../../core/theme/obsidian_theme.dart';
 import '../../../core/widgets/device_detail_sheet.dart';
 import '../../lan_cubit/lan_cubit.dart';
 import '../../lan_cubit/lan_state.dart';
-import 'topology_radar_canvas.dart';
+import './topology_radar_canvas.dart';
 
 /**
  * Tab 1: 360-Degree Subnet Radar & Physical RF HUD.
