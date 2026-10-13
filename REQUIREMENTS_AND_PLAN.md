@@ -1,25 +1,30 @@
 # DotLan — Technical Requirements, Architecture & Execution Plan
 
-**Document Version:** 1.0.0  
+**Document Version:** 2.0.0  
 **Target Platform:** Android (API Level 33–36 / Android 13–16), iOS (Network.framework sandbox)  
-**Author:** Jazdot Enterprises Architecture Team  
-**Status:** Approved for Engineering Implementation  
+**Author:** Jazdot Enterprises Architecture Team & Telco/Network SME  
+**Status:** Approved for Engineering Implementation (v2.0.0 Perfected)  
 
 ---
 
 ## 1. Executive Product Charter
 
 ### 1.1 Vision & Mission
-**DotLan** is an ad-free, local network scanner, smart device auditor, and camera radar. It provides instant visibility into every active IP endpoint on the local subnet without requiring cloud accounts, subscriptions, or invasive permissions.
+**DotLan** is an ad-free, zero-login, privacy-first local subnet auditor, smart IoT scanner, and hidden camera radar. It provides instant visibility into every active IP endpoint on the local Wi-Fi subnet without requiring cloud accounts, subscriptions, or invasive permissions.
 
-### 1.2 Core Success Metrics
+### 1.2 The Competitor Vacuum & Market Opportunity
+* **Fing (10M+ installs)**: Alienated its global user community by imposing mandatory cloud logins, intrusive full-screen video ads, and paywalling basic subnet features behind $6.99/month subscriptions.
+* **WiFiman (Ubiquiti)**: High quality and ad-free, but heavily biased toward UniFi network hardware and completely lacks dedicated traveler camera sentry tools or cryptographic audit exports.
+* **Legacy Android Scanners**: Broken on Android 11–16 because they still attempt to read `/proc/net/arp`, which Google locked down under non-root SELinux policies.
+
+### 1.3 Core Success Metrics
 * **Play Store Velocity**: Top 5 ranking for search queries `who is on my wifi`, `network scanner no ads`, and `hidden camera detector wifi`.
 * **Zero Account Adoption**: 100% of functionality accessible instantly on first launch with zero onboarding friction.
-* **Conversion to Jazdot Enterprises**: 15%+ of users navigate to the Jazdot Suite drawer, learning about **dotedge** (edge computing and on-premises IoT isolation).
+* **Conversion to Jazdot Enterprises**: 15%+ of users navigate to the Jazdot Suite drawer, learning about **dotedge** (edge computing, K3s micro-orchestration, and IoT isolation) and **DotSignal** (5G cellular telemetry).
 
 ---
 
-## 2. Jazdot Ecosystem Similarity & Organization Visibility Blueprint
+## 2. Jazdot Ecosystem Brand Parity
 
 To reinforce the **Jazdot Enterprises** brand, DotLan mirrors the architecture and aesthetic of **DotSignal**:
 
@@ -30,7 +35,7 @@ To reinforce the **Jazdot Enterprises** brand, DotLan mirrors the architecture a
 │ Component            │ Implementation in DotLan (Parity with DotSignal)          │
 ├──────────────────────┼───────────────────────────────────────────────────────────┤
 │ Visual Design System │ Obsidian Luxury CAD Theme (`#05070B` OLED background,     │
-│                      │ hairline emerald/gold borders, monospace figures).        │
+│                      │ hairline emerald/gold borders, monospace tabular figures).│
 ├──────────────────────┼───────────────────────────────────────────────────────────┤
 │ Signature Brand Mark │ `DotLanAnimatedLogo` featuring the pulsing Jazdot Gold    │
 │                      │ Dot anchored at the center of an emerald radar sweep.     │
@@ -44,8 +49,8 @@ To reinforce the **Jazdot Enterprises** brand, DotLan mirrors the architecture a
 │ Verification Seals   │ Exported PDF subnet audits carry cryptographic seals:     │
 │                      │ `VERIFIED_SUBNET_AUDIT_SEAL` & `JAZDOT_SEAL_V2`.          │
 ├──────────────────────┼───────────────────────────────────────────────────────────┤
-│ Cross-App Navigation │ "Jazdot Suite" navigation drawer featuring one-tap access  │
-│                      │ to [DotSignal](file:///home/ros/dotsignal) and [DotBand](file:///home/ros/dotband).             │
+│ Cross-App Navigation │ "Jazdot Suite" navigation drawer featuring one-tap access │
+│                      │ to DotSignal (Cellular 5G) and DotBand (Wi-Fi 6E/7).      │
 ├──────────────────────┼───────────────────────────────────────────────────────────┤
 │ Enterprise Bridge    │ Promotes Jazdot commercial edge infrastructure:           │
 │                      │ "Isolate enterprise IoT with Jazdot dotedge & K3s UPF".   │
@@ -54,164 +59,167 @@ To reinforce the **Jazdot Enterprises** brand, DotLan mirrors the architecture a
 
 ---
 
-## 3. Market Problem & Technical Bottleneck Handled
+## 3. Telco & Protocol SME Analysis (L2, L3, L4, L7 Mechanics)
 
-### 3.1 The Competitor Vacuum
-* **Fing (10M+ downloads)**: Alienated its loyal community by forcing mandatory cloud logins, inserting full-screen ads, and paywalling basic subnet features behind $6.99/month subscriptions.
-* **Legacy Scanners**: Many older utilities crash on Android 11–15 because they still try to parse `/proc/net/arp`, which Google locked down.
+### 3.1 The Post-Android 10 ARP Reality & Unrooted Layer 3 Solution
+* **The Constraint**: Since Android 10, `/proc/net/arp` returns `Permission Denied` to non-root applications. Kernel neighbor MAC addresses cannot be read directly.
+* **The TCP RST Duality**:
+  * Unreachable IP: Causes socket connection timeout (`ETIMEDOUT` / `EHOSTUNREACH`).
+  * Active Host with Closed Port: The host's kernel TCP/IP stack **immediately transmits a TCP RST packet**. In Java/Kotlin, `socket.connect()` throws `ConnectException: Connection refused` in under 2ms.
+  * **Conclusive Principle**: `ConnectException: Connection refused` proves that an active IP host exists at that address! DotLan treats `ECONNREFUSED` as a confirmed active device.
 
-### 3.2 The Android 10+ ARP Bottleneck (Handled Legally & Accurately)
-* **The Reality**: Starting with Android 10, `/proc/net/arp` returns `Permission Denied` to non-root applications. Apps **cannot read neighbor MAC addresses** directly from the kernel table.
-* **How DotLan Solves This**:
-  Instead of failing or displaying fake randomized MAC addresses, DotLan identifies devices via **Application-Layer Service Discovery**:
-  1. **mDNS / DNS-SD** via Android `NsdManager` (discovers hostnames, device types, and broadcast services like `_airplay._tcp`, `_googlecast._tcp`, `_ipp._tcp`).
-  2. **UPnP / SSDP Multicast** over UDP port 1900 (discovers router models, smart bulbs, smart plugs, media servers).
-  3. **High-Value IoT Service Probing** (identifies RTSP video streams on Port 554, ONVIF camera APIs on Port 8000, and HTTP administration interfaces).
+### 3.2 Dynamic Netmask & Bounded Subnet Slicing
+* Instead of naively hardcoding `/24`, DotLan extracts the true CIDR netmask from `LinkProperties.linkAddresses`.
+* If CIDR prefix $< 23$ (e.g. `/16` or `/8` common in hotels, campuses, and enterprise networks):
+  * DotLan executes a high-speed `/24` neighborhood sweep around the local host IP.
+  * Emits mDNS and SSDP multicast queries to discover active broadcasting devices across the wider subnet.
+  * Alerts user with an Enterprise Subnet Badge rather than attempting to open 65,534 simultaneous sockets.
+
+### 3.3 AP Client Isolation (Split-Horizon) Detection
+* In guest networks where peer-to-peer communication is blocked by the wireless access point, DotLan detects the absence of any peer response and triggers an educational badge:
+  > **AP Client Isolation Active**: Device-to-device communication is blocked by this Wi-Fi network. Other guest devices cannot inspect or connect to your phone.
 
 ---
 
-## 4. Functional Requirements (FR)
+## 4. Multi-Tier Discovery Pipeline
 
-### Subnet Discovery & Fingerprinting
-* **FR-01 (Sub-Second Subnet Sweep)**: Scan all 254 host addresses on the local `/24` subnet concurrently in under 1.5 seconds using non-blocking asynchronous socket handshakes.
-* **FR-02 (mDNS Device Discovery)**: Enumerate all Multicast DNS services on the local link using Android's native `NsdManager`, mapping human-readable names (e.g. *"Living Room Apple TV"*, *"Office LaserJet"*).
-* **FR-03 (UPnP / SSDP Gateway Discovery)**: Send M-SEARCH UDP multicast datagrams to `239.255.255.250:1900`, parsing XML device descriptions for gateway models and manufacturer profiles.
-* **FR-04 (Hidden Spy Camera Sentry)**: Automatically probe active IP hosts for open video streaming ports: RTSP (Port 554), ONVIF (Port 8000 / 8899), and MJPEG HTTP streams. Display an urgent badge: **"LOCAL VIDEO CAMERA DETECTED"**.
-* **FR-05 (UPnP Port-Forwarding Audit)**: Query the default gateway router via WANIPConnection UPnP actions to list all external ports exposed to the public internet.
+```
+┌──────────────────────────────────────────────────────────────────────────────────────────────────┐
+│                                   DOTLAN MULTI-TIER DISCOVERY PIPELINE                           │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ TIER 1: ACTIVE IP REACHABILITY (Sub-Second Fast Sweep)                                            │
+│ • Bounded coroutines with Semaphore(128) probing ports 80, 443, 445, 139, 22, 8080, 62078.       │
+│ • TCP RST (Connection Refused) and TCP Established both register confirmed active host.          │
+│ • NetBIOS Name Service (NBNS) UDP 137 status query (RFC 1002) for Windows / SMB hostnames.       │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ TIER 2: mDNS / DNS-SD SERVICE ENUMERATION (RFC 6762 / RFC 6763)                                  │
+│ • Multicast DNS query to 224.0.0.251:5353 with WifiManager.MulticastLock held.                   │
+│ • Native Android NsdManager with fallback to raw UDP MulticastSocket.                            │
+│ • Resolves: Apple TV, AirPlay, Chromecast, Spotify Connect, Printers, Matter/Thread IoT.         │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ TIER 3: SSDP / UPNP DEVICE PROFILING (RFC 2710 / UPnP Device Architecture)                       │
+│ • Multicast M-SEARCH to 239.255.255.250:1900.                                                    │
+│ • Discovers: Gateway routers, Hue bridges, Sonos players, smart TVs, UPnP media servers.         │
+├──────────────────────────────────────────────────────────────────────────────────────────────────┤
+│ TIER 4: HIGH-VALUE SERVICE & SURVEILLANCE SENTRY                                                 │
+│ • RTSP (Port 554), ONVIF (Port 8000/8899), HTTP Web Banners (80/443/8080).                      │
+│ • Multi-stage verification ladder before flagging video camera alerts.                           │
+└──────────────────────────────────────────────────────────────────────────────────────────────────┘
+```
 
-### Network Diagnostics & Security
-* **FR-06 (Gateway Ping & Jitter)**: Measure roundtrip latency to the local default gateway to isolate Wi-Fi congestion from ISP backhaul latency.
-* **FR-07 (Local Port Profiler)**: Conduct targeted port scans on any selected device across the top 20 most common service ports (SSH 22, Telnet 23, DNS 53, HTTP 80, SMB 445, RTSP 554, etc.).
-* **FR-08 (New Device Join Alert)**: Cache known device IPs in local SQLite storage; trigger a local alert whenever a completely new, unrecognized device joins the local network.
+---
+
+## 5. Functional Requirements (FR)
+
+### Subnet Discovery & Host Inventory
+* **FR-01 (Sub-Second Subnet Sweep)**: Scan all 254 host addresses on a `/24` subnet concurrently in under 1.0 second using bounded asynchronous socket handshakes (`Semaphore(128)`, 120ms timeout).
+* **FR-02 (TCP RST Active Host Detection)**: Recognize both `TCP Established` and `TCP RST (Connection Refused)` as affirmative indicators of an active IP host.
+* **FR-03 (mDNS Device Discovery)**: Enumerate Multicast DNS services on `224.0.0.251:5353`, resolving human-readable names (e.g. *"Living Room Apple TV"*, *"Office LaserJet"*).
+* **FR-04 (SSDP / UPnP Gateway & Media Discovery)**: Transmit `M-SEARCH` multicast datagrams to `239.255.255.250:1900`, parsing XML device descriptions for manufacturer, model, and friendly names.
+* **FR-05 (NetBIOS NBNS Resolution)**: Send UDP port 137 Node Status queries to resolve legacy Windows, Linux Samba, and NAS hostnames.
+* **FR-06 (Dynamic CIDR Slicing)**: Detect netmask prefix from `LinkProperties`; protect against file descriptor exhaustion on enterprise `/16` or `/8` networks.
+
+### Security, Camera Sentry & Gateway Auditing
+* **FR-07 (Hidden Camera & Video Stream Sentry)**: Automatically scan for RTSP (Port 554) and ONVIF (Port 8000/8899) endpoints. Execute RTSP `OPTIONS * RTSP/1.0` and ONVIF SOAP handshakes to verify genuine video feeds and eliminate false positives.
+* **FR-08 (Zero-Cloud WAN IP Discovery)**: Query router UPnP IGD `WANIPConnection:1` action `GetExternalIPAddress` to retrieve public WAN IP on-device with zero external cloud dependencies.
+* **FR-09 (UPnP Port-Forwarding Vulnerability Audit)**: Enumerate router port mappings via `GetGenericPortMappingEntry`, flagging exposed external WAN ports (RDP 3389, Torrent, Plex, CCTV).
+* **FR-10 (Double-NAT & CGNAT Detection)**: Compare router WAN IP against RFC 1918 and RFC 6598 (`100.64.0.0/10`) to identify ISP Carrier-Grade NAT and Double-NAT topologies.
+* **FR-11 (Targeted Port Profiler)**: On explicit user demand, scan top 20 ports on any selected host (SSH 22, Telnet 23, DNS 53, HTTP 80, SMB 445, RTSP 554, etc.).
+* **FR-12 (New Device Join Alert)**: Cache known device fingerprints in local storage; trigger instant notification when an unrecognized IP joins the subnet.
 
 ### Export & Organization Telemetry
-* **FR-09 (OCSF v1.3.0 Serialization)**: Export subnet host inventories as standardized Open Cybersecurity Schema Framework Class 4001 events.
-* **FR-10 (Jazdot PDF Audit Certificate)**: Generate branded PDF network audit certificates with Jazdot proof seals, highlighting open camera feeds and vulnerable UPnP forwards.
-* **FR-11 (JSON / CSV Subnet Dump)**: One-tap export of active IP addresses, hostnames, and detected services.
-* **FR-12 (Enterprise Cloud Uplink)**: Optional sync to Jazdot `dotedge` edge nodes for automated IoT device discovery on industrial factory networks.
+* **FR-13 (OCSF v1.3.0 Serialization)**: Export subnet host inventories as standardized Open Cybersecurity Schema Framework Class 4001 (Network Activity) JSONL events.
+* **FR-14 (Jazdot PDF Audit Certificate)**: Generate branded executive PDF network audit certificates with cryptographic verification seals (`VERIFIED_SUBNET_AUDIT_SEAL`), Wi-Fi RF details, and camera scan results.
+* **FR-15 (JSON & CSV Data Dumps)**: One-tap export of active IP addresses, hostnames, response latencies, and open services.
+* **FR-16 (Jazdot Suite Navigation)**: Cross-navigation drawer providing direct links to DotSignal (Cellular 5G) and DotBand (Wi-Fi 6E/7).
 
 ---
 
-## 5. Non-Functional & Security Requirements (NFR)
+## 6. Non-Functional & Security Requirements (NFR)
 
 * **NFR-01 (100% Non-Root Compliance)**: Strictly zero root or privileged signature permissions required.
-* **NFR-02 (Zero Cloud Telemetry)**: All subnet scans, mDNS parsing, and PDF reports execute completely on-device. No data is ever sent to external cloud servers.
-* **NFR-03 (Sub-2s Scan Velocity)**: Full `/24` subnet scan must finish in under 2.0 seconds on standard 802.11ac/ax Wi-Fi.
-* **NFR-04 (Battery & Network Courtesy)**: Limit socket connect timeouts to 150ms per probe to prevent network congestion or battery drain.
-* **NFR-05 (Google Play Store Compliance)**: Adheres strictly to the Google Play Developer Policy; requires only `INTERNET`, `ACCESS_NETWORK_STATE`, and `ACCESS_WIFI_STATE`.
-
----
-
-## 6. Technical Architecture & Discovery Engine
-
-```
-┌────────────────────────────────────────────────────────────────────────┐
-│                         DOTLAN DISCOVERY PIPELINE                      │
-├────────────────────────────────────────────────────────────────────────┤
-│ 1. Subnet Identification                                               │
-│    • Query WifiManager.dhcpInfo ──► Extract IP (e.g. 192.168.1.45)     │
-│    • Extract Netmask (255.255.255.0) ──► Calculate Range (1–254)       │
-│                                  │                                     │
-│ 2. Concurrent Asynchronous Sweep (Kotlin Coroutines)                   │
-│    • Dispatch 254 non-blocking TCP socket probes (Ports 80, 443, 554)  │
-│    • Timeout: 120ms per socket ──► Aggregate responding IP hosts       │
-│                                  │                                     │
-│ 3. Service Fingerprinting                                              │
-│    • Android NsdManager ────────► mDNS Bonjour Hostname Resolution     │
-│    • MulticastSocket (UDP 1900) ─► SSDP UPnP XML Device Descriptions   │
-│    • RTSP Port 554 Probe ───────► Hidden Camera Sentry Classification  │
-│                                  │                                     │
-│ 4. Reactive UI & State Management (Flutter BLoC)                       │
-│    • SubnetInventoryCubit ──────► Stream discovered hosts to UI        │
-│    • TopologyRadarPainter ──────► Render interactive 360° radar canvas │
-└────────────────────────────────────────────────────────────────────────┘
-```
-
-### 6.1 Kotlin Asynchronous Socket Sweep Implementation
-```kotlin
-suspend fun scanSubnet(baseIp: String, onHostFound: (String) -> Unit) = coroutineScope {
-    val commonPorts = intArrayOf(80, 443, 554, 8080)
-    for (i in 1..254) {
-        val targetIp = "$baseIp.$i"
-        launch(Dispatchers.IO) {
-            for (port in commonPorts) {
-                try {
-                    Socket().use { socket ->
-                        socket.connect(InetSocketAddress(targetIp, port), 120)
-                        onHostFound(targetIp)
-                        return@launch
-                    }
-                } catch (_: Exception) {}
-            }
-        }
-    }
-}
-```
+* **NFR-02 (Zero Cloud Telemetry)**: All subnet scans, mDNS parsing, and PDF reports execute completely on-device. Zero telemetry uploads.
+* **NFR-03 (Sub-Second Scan Velocity)**: Full `/24` subnet sweep completed in $< 1.0$ second on standard 802.11ac/ax/be Wi-Fi.
+* **NFR-04 (File Descriptor Guard)**: Bound concurrent socket connections to $\le 128$ to prevent Linux `EMFILE` exhaustion.
+* **NFR-05 (MulticastLock Lifecycle)**: Properly acquire and release `WifiManager.MulticastLock` on Android to prevent Wi-Fi NIC multicast dropping without battery drain.
+* **NFR-06 (iOS Local Network Compliance)**: Gracefully handle `NSLocalNetworkUsageDescription` permissions; support fallback Bonjour `NWBrowser` discovery.
+* **NFR-07 (Google Play Store Compliance)**: Adheres strictly to Google Play Developer Policies (`INTERNET`, `ACCESS_NETWORK_STATE`, `ACCESS_WIFI_STATE`, `CHANGE_WIFI_MULTICAST_STATE`).
 
 ---
 
 ## 7. UI/UX Architecture & Screen Flow
 
+```
+┌──────────────────────────────────────────────────────────────────────────────────┐
+│                             DOTLAN 4-TAB ARCHITECTURE                            │
+├───────────────────┬───────────────────┬───────────────────┬──────────────────────┤
+│ TAB 1: RADAR      │ TAB 2: INVENTORY  │ TAB 3: SENTRY     │ TAB 4: DIAGNOSTICS   │
+│ Interactive 360°  │ Categorized host  │ Dedicated Airbnb  │ UPnP port forwards,  │
+│ topology canvas   │ cards with vendor │ hidden camera &   │ WAN IP, ping jitter, │
+│ plotted by latency│ badges & ports    │ RTSP/ONVIF sentry │ DNS hijacking audit  │
+└───────────────────┴───────────────────┴───────────────────┴──────────────────────┘
+```
+
 1. **Tab 1: RADAR (Interactive Topology Canvas)**:
-   - Central pulsing Jazdot Gold Dot representing the device/observer.
+   - Central pulsing Jazdot Gold Dot representing the local observer/gateway.
    - Discovered devices plotted radially by response latency (ms).
-   - Distinct emerald badges for cameras, routers, and workstations.
-2. **Tab 2: INVENTORY (Device List)**:
-   - Clean card per host displaying: IP, Hostname, Detected Services (`mDNS`, `UPnP`, `RTSP`), Latency.
-   - Quick action: "Inspect Ports".
+   - Rotating radar sweep beam with trailing emerald gradient.
+   - Interactive blip touch selection opening quick-inspect modal.
+2. **Tab 2: INVENTORY (Device List & Port Profiler)**:
+   - Filter chips: All, Cameras, Gateways, Compute, Mobile, Smart IoT.
+   - Host cards displaying IP, Hostname, Detected Services (`mDNS`, `UPnP`, `NBNS`, `RTSP`), and Ping Latency.
+   - One-tap action: "Targeted Port Scan".
 3. **Tab 3: CAMERA SENTRY (Traveler Privacy Guard)**:
-   - Dedicated Airbnb/Hotel mode scanning exclusively for hidden RTSP/ONVIF streaming feeds.
-4. **Tab 4: DIAGNOSTICS (Gateway & DNS Health)**:
-   - Gateway ping jitter, external WAN IP lookup, and DNS hijack check.
+   - Dedicated Airbnb & Hotel room sweep mode.
+   - High-contrast visual indicators: "Zero Video Streams Detected" vs "Confirmed RTSP Video Stream".
+   - One-tap export: "Traveler Safety Audit Certificate".
+4. **Tab 4: DIAGNOSTICS (Gateway & Security Health)**:
+   - Router model, firmware, and UPnP IGD status.
+   - True on-device WAN IP and Double-NAT / CGNAT classification.
+   - Exposed UPnP Port Forwarding Vulnerability Table.
+   - Gateway ping jitter and DNS integrity verification.
 
 ---
 
-## 8. Phased Development Roadmap
+## 8. Implementation Roadmap
 
 ```
 ┌────────────────────────────────────────────────────────────────────────┐
-│ PHASE 1: Native Subnet & Socket Sweep Engine (Days 1–3)                │
-│ • Kotlin coroutine /24 IP prober with 120ms timeout                    │
-│ • Flutter MethodChannel & EventChannel bridge                          │
+│ PHASE 1: Subnet Socket Sweep & Discovery Engine (Days 1–3)             │
+│ • Bounded coroutines with Semaphore(128) and TCP RST detection         │
+│ • Dynamic CIDR netmask parsing and NetBIOS NBNS UDP 137 prober         │
 ├────────────────────────────────────────────────────────────────────────┤
 │ PHASE 2: mDNS & UPnP Service Fingerprinting (Days 4–6)                 │
-│ • Android NsdManager integration for Bonjour discovery                │
-│ • UDP 1900 SSDP multicast query engine                                 │
+│ • MulticastLock management on Android                                  │
+│ • mDNS DNS-SD query engine and SSDP M-SEARCH parser                    │
 ├────────────────────────────────────────────────────────────────────────┤
-│ PHASE 3: Camera Sentry & Port Profiler (Days 7–9)                      │
-│ • Port 554/8000 streaming probe and camera classification badge        │
-│ • Multi-port targeted scanner for selected hosts                       │
+│ PHASE 3: Camera Sentry & Router UPnP Auditor (Days 7–9)                │
+│ • RTSP OPTIONS & ONVIF SOAP handshake verification                     │
+│ • UPnP IGD WAN IP and GetGenericPortMappingEntry auditor               │
 ├────────────────────────────────────────────────────────────────────────┤
-│ PHASE 4: Jazdot Brand & Export Architecture (Days 10–12)               │
-│ • DotLanAnimatedLogo, ObsidianTheme, and Jazdot Suite drawer           │
-│ • OCSF v1.3.0 exporter, JSON/CSV dump, and PDF audit generator         │
+│ PHASE 4: UI/UX Canvas & Obsidian Design Integration (Days 10–12)       │
+│ • 360° Topology Radar CustomPainter with 120fps stutter-free canvas    │
+│ • 4-tab navigation, Inventory cards, and Jazdot Suite drawer           │
 ├────────────────────────────────────────────────────────────────────────┤
-│ PHASE 5: Hardening & Google Play Submission (Days 13–14)               │
-│ • Performance optimization on 500+ host enterprise networks           │
-│ • Store assets, screenshots, and privacy policy publication            │
+│ PHASE 5: Enterprise Forensics, OCSF v1.3.0 & Production APK (13–14)    │
+│ • OCSF Class 4001 JSONL exporter & PDF Audit Report Generator          │
+│ • Full test suite and release build verification                       │
 └────────────────────────────────────────────────────────────────────────┘
 ```
 
 ---
 
-## 9. Google Play Store Launch & SEO Strategy
-
-* **App Title**: `DotLan: Wi-Fi Scanner & Cam Radar`
-* **Subtitle**: `Ad-free network scanner, who is on my Wi-Fi & hidden camera detector.`
-* **Keywords**: `who is on my wifi`, `network scanner no ads`, `hidden camera detector wifi`, `local ip scanner`, `upnp scanner`, `iot device finder`.
-* **Screenshot Value Props**:
-  1. *"Who is using your Wi-Fi? Discovered in under 2 seconds."*
-  2. *"100% Ad-Free. Zero accounts. 100% on-device privacy."*
-  3. *"Detect hidden cameras & video streams in Airbnb rentals."*
-  4. *"Audit router port-forwarding and UPnP security risks."*
-
----
-
-## 10. Risk Analysis & Mitigation Matrix
+## 9. Risk Analysis & Mitigation Matrix
 
 | Risk Factor | Probability | Impact | Mitigation Strategy |
 | :--- | :--- | :--- | :--- |
-| **Silent Hosts (No Open Ports)** | Medium | Medium | Propose ping packets (`InetAddress.isReachable()`) combined with mDNS multicast queries to discover devices that do not listen on HTTP/RTSP. |
-| **Wi-Fi Client Isolation (Guest Networks)**| High | Low | If client isolation is active on the router, display clear notification: *"Client isolation detected on this Wi-Fi network. Device-to-device communication is blocked by the router."* |
-| **Antivirus Port-Scan False Positives** | Low | Low | Keep probe rates reasonable; limit targeted scans to top 20 ports only upon explicit user tap. |
-| **Play Store Policy Compliance** | Low | Low | Zero VPNs, zero root requirements, standard networking permissions only (`INTERNET`, `ACCESS_NETWORK_STATE`, `ACCESS_WIFI_STATE`). |
+| **Silent Hosts (Firewall Drops)** | High | Medium | Combine TCP sweeps across 7 key ports with NetBIOS UDP 137 queries, mDNS broadcasts, and treat TCP RST as affirmative host alive indicator. |
+| **Enterprise /16 Subnet Overload** | Medium | High | Dynamically calculate CIDR prefix. Slice /16 into immediate /24 neighborhood + multicast discovery; require explicit user confirmation for broader sweeps. |
+| **Android Multicast Dropping** | High | High | Explicitly acquire `WifiManager.MulticastLock` before dispatching mDNS or SSDP queries; release immediately upon scan completion. |
+| **File Descriptor Exhaustion (EMFILE)** | Medium | High | Constrain maximum concurrent active sockets to $\le 128$ via `Semaphore`. |
+| **Camera Sentry False Positives** | High | High | Strictly require RTSP `OPTIONS * RTSP/1.0` or ONVIF XML handshake verification before flagging confirmed camera alerts. |
+| **iOS Local Network Permission Rejection** | Medium | High | Display Obsidian pre-permission educational banner before triggering first local socket probe. |
+
+---
+
+*Certified by Jazdot Enterprises Architecture Board — DotLan Engineering Specifications v2.0.0*

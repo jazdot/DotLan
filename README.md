@@ -12,9 +12,9 @@
 
 ## Executive Overview
 
-**DotLan** is an ad-free, privacy-first local network auditor and smart device radar. It solves the number one question asked by homeowners, travelers, and enterprise IT staff: **"Who is on my Wi-Fi, and what are they doing?"**
+**DotLan** is an ad-free, zero-login, privacy-first local network auditor and smart device radar. It solves the number one question asked by homeowners, travelers, and enterprise IT staff: **"Who is on my Wi-Fi, and what are they doing?"**
 
-While competing apps like Fing alienated millions of users by introducing mandatory cloud logins, banner ads, and $6.99/month subscriptions—and legacy scanners broke on modern Android because of kernel `/proc/net/arp` restrictions—**DotLan** delivers a sub-second, zero-login, privacy-respecting local network sweep utilizing **modern application-layer service discovery (mDNS, UPnP, and IoT service port probing)**.
+While competing apps like Fing alienated millions of users by introducing mandatory cloud logins, full-screen ads, and $6.99/month subscriptions—and legacy scanners broke on modern Android because of kernel `/proc/net/arp` restrictions—**DotLan** delivers a sub-second, zero-login, privacy-respecting local network sweep utilizing **modern multi-tier application and transport layer discovery (TCP RST handshakes, mDNS, UPnP, NetBIOS NBNS, and verified RTSP/ONVIF camera probes)**.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────┐
@@ -31,10 +31,10 @@ While competing apps like Fing alienated millions of users by introducing mandat
 
 ## Key Capabilities
 
-1. **Sub-Second Subnet Discovery**: Scans local `/24` subnets (254 addresses) in under 1.5 seconds via asynchronous non-blocking TCP socket sweeps.
-2. **Hidden Camera & Video Stream Sentry**: Probes local IP endpoints for active RTSP (port 554) and ONVIF (port 8000) streaming listeners—an essential security check for Airbnb guests and hotel travelers.
-3. **mDNS & UPnP Service Fingerprinting**: Automatically extracts device names, broadcast services, and hardware profiles via Android `NsdManager` without needing blocked MAC addresses.
-4. **Router UPnP Port-Forwarding Auditor**: Flags routers with dangerous UPnP port-forwarding mappings exposed to the public internet.
+1. **Sub-Second Subnet Discovery**: Scans local `/24` subnets (254 addresses) in under 1.0 second via asynchronous bounded non-blocking socket sweeps (`Semaphore(128)`, 120ms timeout) utilizing TCP RST affirmative detection.
+2. **Hidden Camera & Video Stream Sentry**: Deeply probes local endpoints with verified RTSP (Port 554) `OPTIONS` handshakes and ONVIF (Port 8000) SOAP discovery—eliminating false alarms and providing essential security for Airbnb guests and hotel travelers.
+3. **mDNS & UPnP Service Fingerprinting**: Automatically extracts device names, broadcast services, and hardware profiles via Android `NsdManager` and UDP multicast without needing blocked `/proc/net/arp` kernel tables.
+4. **Router UPnP Port-Forwarding Auditor**: Queries router IGD endpoints on-device to retrieve public WAN IP without external cloud dependencies, flagging dangerous external UPnP port mappings.
 5. **Obsidian Luxury CAD Dark Theme**: 100% ad-free, zero account requirements, zero telemetry uploads.
 6. **OCSF v1.3.0 & JSON Export**: Seamlessly exports subnet inventory to enterprise SIEM tools (`dotsec`) and local edge orchestrators (`dotedge`).
 
@@ -72,7 +72,7 @@ To maximize corporate visibility for **Jazdot Enterprises**, DotLan mirrors the 
 ├── tests/                          # Automated unit & conformance test suite
 ├── pubspec.yaml                    # Flutter project configuration
 ├── README.md                       # Repository overview & quick start
-└── REQUIREMENTS_AND_PLAN.md        # Comprehensive technical requirements & roadmap
+└── REQUIREMENTS_AND_PLAN.md        # Comprehensive technical requirements & roadmap (v2.0.0)
 ```
 
 ---
