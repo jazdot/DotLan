@@ -1,0 +1,11 @@
+Analyzing DotLan...                                             
+
+  error • Const variables must be initialized with a constant value • lib/core/export/pdf_audit_report_generator.dart:17:29 • const_initialized_with_non_constant_value
+  error • The constructor being called isn't a const constructor • lib/core/export/pdf_audit_report_generator.dart:17:29 • const_with_non_const
+warning • The value of the local variable 'lowerMdns' isn't used • lib/core/network/device_fingerprinter.dart:25:11 • unused_local_variable
+warning • Unused import: './oui_database.dart' • lib/core/network/subnet_discovery_engine.dart:6:8 • unused_import
+warning • Unused import: './camera_sentry_engine.dart' • lib/core/network/subnet_discovery_engine.dart:7:8 • unused_import
+warning • Unused import: '../../core/export/ocsf_exporter.dart' • lib/core/widgets/device_detail_sheet.dart:5:8 • unused_import
+warning • Unused import: '../../core/network/camera_sentry_engine.dart' • lib/features/lan_cubit/lan_state.dart:4:8 • unused_import
+
+7 issues found. (ran in 8.9s)
