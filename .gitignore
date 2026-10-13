@@ -1,0 +1,19 @@
+# Flutter and Dart build artifacts
+.dart_tool/
+.packages
+build/
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Android build artifacts
+.gradle/
+local.properties
+android/app/build/
+
+# Python test cache
+__pycache__/
+.pytest_cache/
+
+# Binary builds
+*.apk
+*.aab
