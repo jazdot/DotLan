@@ -14,7 +14,7 @@
 
 **DotLan** is an ad-free, zero-login, privacy-first local network auditor and smart device radar. It solves the number one question asked by homeowners, travelers, and enterprise IT staff: **"Who is on my Wi-Fi, and what are they doing?"**
 
-While competing apps like Fing alienated millions of users by introducing mandatory cloud logins, full-screen ads, and $6.99/month subscriptions—and legacy scanners broke on modern Android because of kernel `/proc/net/arp` restrictions—**DotLan** delivers a sub-second, zero-login, privacy-respecting local network sweep utilizing **modern multi-tier application and transport layer discovery (TCP RST handshakes, mDNS, UPnP, NetBIOS NBNS, and verified RTSP/ONVIF camera probes)**.
+While competing apps like Fing alienated millions of users by introducing mandatory cloud logins, full-screen ads, and $6.99/month subscriptions—and legacy scanners broke on modern Android because of kernel `/proc/net/arp` restrictions—**DotLan** delivers a sub-second, zero-login, privacy-respecting local network sweep utilizing **modern multi-tier application, transport, and link layer discovery (TCP RST handshakes, IPv6 NDP multicast, mDNS, UPnP, NetBIOS NBNS, and verified RTSP/ONVIF camera probes)**.
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────┐
@@ -24,7 +24,10 @@ While competing apps like Fing alienated millions of users by introducing mandat
 │ Apple TV, Chromecast, │ Routers, Gateways,       │ RTSP (Port 554), ONVIF (8000) │
 │ AirPlay, Printers,    │ Smart Plugs, Media Sinks │ Web Banners (80/443),         │
 │ NAS Samba Shares      │ Embedded Edge Workloads  │ Raw Printers (Port 9100)      │
-└───────────────────────┴──────────────────────────┴───────────────────────────────┘
+├───────────────────────┴──────────────────────────┴───────────────────────────────┤
+│ IPv6 NDP Multicast    │ NetBIOS NBNS (UDP 137)   │ Wi-Fi 7 / 6E Physical RF HUD  │
+│ ICMPv6 ff02::1 & mDNS │ Physical MAC Extraction  │ MLO, 320 MHz, 6 GHz, RSSI     │
+└──────────────────────────────────────────────────┴───────────────────────────────┘
 ```
 
 ---
@@ -32,11 +35,14 @@ While competing apps like Fing alienated millions of users by introducing mandat
 ## Key Capabilities
 
 1. **Sub-Second Subnet Discovery**: Scans local `/24` subnets (254 addresses) in under 1.0 second via asynchronous bounded non-blocking socket sweeps (`Semaphore(128)`, 120ms timeout) utilizing TCP RST affirmative detection.
-2. **Hidden Camera & Video Stream Sentry**: Deeply probes local endpoints with verified RTSP (Port 554) `OPTIONS` handshakes and ONVIF (Port 8000) SOAP discovery—eliminating false alarms and providing essential security for Airbnb guests and hotel travelers.
-3. **mDNS & UPnP Service Fingerprinting**: Automatically extracts device names, broadcast services, and hardware profiles via Android `NsdManager` and UDP multicast without needing blocked `/proc/net/arp` kernel tables.
-4. **Router UPnP Port-Forwarding Auditor**: Queries router IGD endpoints on-device to retrieve public WAN IP without external cloud dependencies, flagging dangerous external UPnP port mappings.
-5. **Obsidian Luxury CAD Dark Theme**: 100% ad-free, zero account requirements, zero telemetry uploads.
-6. **OCSF v1.3.0 & JSON Export**: Seamlessly exports subnet inventory to enterprise SIEM tools (`dotsec`) and local edge orchestrators (`dotedge`).
+2. **Dual-Stack IPv6 NDP Discovery**: Enumerates active IPv6 devices on modern networks via ICMPv6 All-Nodes Multicast (`ff02::1`) and IPv6 mDNS, unifying dual-stack host cards.
+3. **Hidden Camera & Video Stream Sentry**: Deeply probes local endpoints with verified RTSP (Port 554) `OPTIONS` handshakes and ONVIF (Port 8000) SOAP discovery—eliminating false alarms and providing essential security for Airbnb guests and hotel travelers.
+4. **mDNS & UPnP Service Fingerprinting**: Automatically extracts device names, broadcast services, and hardware profiles via Android `NsdManager` and UDP multicast without needing blocked `/proc/net/arp` kernel tables.
+5. **Router UPnP Port-Forwarding Auditor**: Queries router IGD endpoints on-device to retrieve public WAN IP without external cloud dependencies, flagging dangerous external UPnP port mappings.
+6. **Wi-Fi 7 / 6E Physical RF Telemetry**: Displays real-time Wi-Fi standard, 320 MHz channel width, 6 GHz band, RSSI (dBm), and Multi-Link Operation (MLO) status.
+7. **Multi-Sensory Radar Haptics**: Emits rotary tactile ticks as the radar beam sweeps past active hosts and urgent vibrations upon verifying a video camera stream.
+8. **Obsidian Luxury CAD Dark Theme**: 100% ad-free, zero account requirements, zero telemetry uploads.
+9. **OCSF v1.3.0 & JSON Export**: Seamlessly exports subnet inventory to enterprise SIEM tools (`dotsec`) and local edge orchestrators (`dotedge`).
 
 ---
 
@@ -72,7 +78,7 @@ To maximize corporate visibility for **Jazdot Enterprises**, DotLan mirrors the 
 ├── tests/                          # Automated unit & conformance test suite
 ├── pubspec.yaml                    # Flutter project configuration
 ├── README.md                       # Repository overview & quick start
-└── REQUIREMENTS_AND_PLAN.md        # Comprehensive technical requirements & roadmap (v2.0.0)
+└── REQUIREMENTS_AND_PLAN.md        # Comprehensive technical requirements & roadmap (v2.1.0)
 ```
 
 ---
